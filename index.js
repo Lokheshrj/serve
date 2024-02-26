@@ -101,3 +101,19 @@ mongoose
      app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
   })
   .catch((error) => console.log(`${error} did not connect`));
+
+
+  app.get('/user/:name', async (req, res) => {
+    const { name } = req.params;
+    try {
+      // Search for users where firstName or lastName matches the provided name
+      const user = await User.findOne({ firstName: name });
+      if (user) {
+        res.json(user);
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
